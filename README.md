@@ -1,49 +1,44 @@
-# OVerall Architecture
-
-graph TD
-    classDef backend fill:#ADD8E6;
-    classDef api fill:#90EE90;
-    classDef cache fill:#E6E6FA;
-    classDef database fill:#FFFFE0;
+```mermaid
+graph TB
+    subgraph DesktopApp
+        DClient[Desktop Client]
+    end
 
     subgraph Backend
-        direction TB
+        Cache[Caching]
         Server[Server]
-        TaskProcessor[Task Processor]
-        APIGateway[API Gateway]
-        FinancialDataCache[Financial Data Cache]
-        class Server,TaskProcessor,APIGateway,FinancialDataCache backend
+        TaskProc[Task Processor]
+        APIGW[API Gateway]
     end
 
     subgraph API
-        direction TB
-        DiscordAPI[Discord API]
-        GoogleSheetsAPI[Google Sheets API]
-        GroqAPI[Groq API]
-        class DiscordAPI,GoogleSheetsAPI,GroqAPI api
+        Gemini[Gemini API]
+        Groq[Groq API]
+        Cloudflare[Cloudflare API]
     end
 
     subgraph Database
-        direction TB
         Supabase[Supabase]
-        class Supabase database
     end
 
-    DiscordBot[Discord Bot] -->|Connect to Cache| FinancialDataCache
-    DiscordBot -->|General Commands| Server
+    subgraph ClientSide["Client-Side Processing (Desktop)"]
+        DClientProc[Desktop Client Processing]
+    end
 
-    Server -->|API Request| APIGateway
-    Server -->|Data Processing Request| TaskProcessor
-    Server -->|Check/Update Cache| FinancialDataCache
+    DClient --> DClientProc
+    DClientProc --> Cache
 
-    APIGateway -->|Communicate with Discord| DiscordAPI
-    APIGateway -->|Communicate| GroqAPI
-    APIGateway -->|Retrieve Financial Data (if not cached)| GoogleSheetsAPI
+    Server <-- Cache
+    Cache --> DClient
+    Server --> TaskProc
+    TaskProc --> Supabase
+    TaskProc --> APIGW
+    TaskProc --> Server
 
-    TaskProcessor -->|Query/Update Data| Supabase
-    TaskProcessor -->|Processed Data Response| Server
-    TaskProcessor -->|Processed Data Response| GroqAPI
+    Server --> APIGW
+    APIGW --> Gemini
+    APIGW --> Groq
+    APIGW --> Cloudflare
+    APIGW --> Server
 
-    FinancialDataCache -->|Cached Financial Data| Server
-
-
+```
