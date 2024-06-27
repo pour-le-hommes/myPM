@@ -17,15 +17,15 @@ def run_conversation(list_messages, model_name):
         messages=messages,
         tools=tools,
         tool_choice="auto",
-        max_tokens=1024,
+        max_tokens=200,
         temperature=1
     )
-    print("First response received...")
+    print("First response received...", response.choices[0].message)
     response_message = response.choices[0].message
     tool_calls = response_message.tool_calls
     # Step 2: check if the model wanted to call a function
     if tool_calls:
-        print(tool_calls)
+        print("tools called:\n\n",tool_calls)
         # Step 3: call the function
         # Note: the JSON response may not always be valid; be sure to handle errors
         available_functions = {
@@ -55,7 +55,7 @@ def run_conversation(list_messages, model_name):
             model=model_name,
             messages=messages,
             max_tokens=1024,
-            temperature=1
+            temperature=0.9
         )  # get a new response from the model where it can see the function response
         print(second_response.choices[0].message.content)
         return second_response.choices[0].message.content
