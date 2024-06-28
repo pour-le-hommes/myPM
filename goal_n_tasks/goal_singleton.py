@@ -8,7 +8,7 @@ def get_goals(iteration:int):
         "x-vercel-protection-bypass":vercel_header
     }
 
-    resp = requests.get(f"{os.getenv("MY_BACKEND_WEBSITE")}/lifeup/tasks/{iteration}/sprint_goals", headers=header)
+    resp = requests.get(f"{os.getenv('MY_BACKEND_WEBSITE')}/lifeup/tasks/{iteration}/sprint_goals", headers=header)
 
     if resp.status_code == 200:
         # Decode the response content to a string
@@ -23,7 +23,7 @@ def get_tasks(iteration:int):
         "x-vercel-protection-bypass":vercel_header
     }
 
-    resp = requests.get(f"{os.getenv("MY_BACKEND_WEBSITE")}/lifeup/tasks/{iteration}/tasks", headers=header)
+    resp = requests.get(f"{os.getenv('MY_BACKEND_WEBSITE')}/lifeup/tasks/{iteration}/tasks", headers=header)
 
     if resp.status_code == 200:
         # Decode the response content to a string
