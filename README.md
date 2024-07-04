@@ -1,4 +1,4 @@
-# Image Integration with CTk and Gemini
+# Retrieval Augmented Generation with CTk and Groq
 
 ```mermaid
 graph TD
